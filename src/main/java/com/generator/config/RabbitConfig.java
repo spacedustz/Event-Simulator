@@ -9,9 +9,11 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Slf4j
 @Configuration
@@ -35,75 +37,107 @@ public class RabbitConfig {
     MessageConverter converter() { return new Jackson2JsonMessageConverter(); }
 
     @Bean
-    public ConnectionFactory connectionFactory1() {
-        CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost(host);
-        factory.setPort(port+1);
-        factory.setUsername(id);
-        factory.setPassword(pw);
-
-        return factory.getRabbitConnectionFactory();
-    }
-
-    @Bean
-    public ConnectionFactory connectionFactory2() {
-        CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost(host);
-        factory.setPort(port+2);
-        factory.setUsername(id);
-        factory.setPassword(pw);
-
-        return factory.getRabbitConnectionFactory();
-    }
-
-    @Bean
-    public ConnectionFactory connectionFactory3() {
-        CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost(host);
-        factory.setPort(port+3);
-        factory.setUsername(id);
-        factory.setPassword(pw);
-
-        return factory.getRabbitConnectionFactory();
-    }
-
-    @Bean
-    public ConnectionFactory connectionFactory4() {
+    @Primary
+    @Qualifier("factory1")
+    public org.springframework.amqp.rabbit.connection.ConnectionFactory factory1() {
         CachingConnectionFactory factory = new CachingConnectionFactory();
         factory.setHost(host);
         factory.setPort(port);
         factory.setUsername(id);
         factory.setPassword(pw);
 
-        return factory.getRabbitConnectionFactory();
+        log.info("[Bean] Connection Factory 1 연결 성공 - Port : {}", factory.getPort());
+        return factory;
+    }
+
+    @Bean
+    @Qualifier("factory2")
+    public org.springframework.amqp.rabbit.connection.ConnectionFactory factory2() {
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port+1);
+        factory.setUsername(id);
+        factory.setPassword(pw);
+
+        log.info("[Bean] Connection Factory 2 연결 성공 - Port : {}", factory.getPort());
+        return factory;
+    }
+
+    @Bean
+    @Qualifier("factory3")
+    public org.springframework.amqp.rabbit.connection.ConnectionFactory factory3() {
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port+2);
+        factory.setUsername(id);
+        factory.setPassword(pw);
+
+        log.info("[Bean] Connection Factory 3 연결 성공 - Port : {}", factory.getPort());
+        return factory;
+    }
+
+    @Bean
+    @Qualifier("factory4")
+    public org.springframework.amqp.rabbit.connection.ConnectionFactory factory4() {
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port+3);
+        factory.setUsername(id);
+        factory.setPassword(pw);
+
+        log.info("[Bean] Connection Factory 4 연결 성공 - Port : {}", factory.getPort());
+        return factory;
     }
 
     // Rabbit Template 생성
     @Bean
-    public RabbitTemplate rabbitTemplate1(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory1) {
-        return new RabbitTemplate(connectionFactory1);
+    @Primary
+    @Qualifier("template1")
+    public RabbitTemplate template1() {
+        RabbitTemplate template = new RabbitTemplate(factory1());
+        template.setMessageConverter(converter());
+
+        log.info("[Bean] Template 1 연결 성공");
+        return template;
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate2(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory2) {
-        return new RabbitTemplate(connectionFactory2);
+    @Qualifier("template2")
+    public RabbitTemplate template2() {
+        RabbitTemplate template = new RabbitTemplate(factory2());
+        template.setMessageConverter(converter());
+
+        log.info("[Bean] Template 2 연결 성공");
+        return template;
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate3(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory3) {
-        return new RabbitTemplate(connectionFactory3);
+    @Qualifier("template3")
+    public RabbitTemplate template3() {
+        RabbitTemplate template = new RabbitTemplate(factory3());
+        template.setMessageConverter(converter());
+
+        log.info("[Bean] Template 3 연결 성공");
+        return template;
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate4(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory4) {
-        return new RabbitTemplate(connectionFactory4);
+    @Qualifier("template4")
+    public RabbitTemplate template4() {
+        RabbitTemplate template = new RabbitTemplate(factory4());
+        template.setMessageConverter(converter());
+
+        log.info("[Bean] Template 4 연결 성공");
+        return template;
     }
 
     // Subscriber Listen Container
     @Bean
-    SimpleRabbitListenerContainerFactory listener1(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory1) {
+    @Primary
+    @Qualifier("listener1")
+    SimpleRabbitListenerContainerFactory listener1(org.springframework.amqp.rabbit.connection.ConnectionFactory factory1) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory1);
+        factory.setConnectionFactory(factory1);
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -111,9 +145,10 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleRabbitListenerContainerFactory listener2(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory2) {
+    @Qualifier("listener2")
+    SimpleRabbitListenerContainerFactory listener2(org.springframework.amqp.rabbit.connection.ConnectionFactory factory2) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory2);
+        factory.setConnectionFactory(factory2);
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -121,9 +156,10 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleRabbitListenerContainerFactory listener3(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory3) {
+    @Qualifier("listener3")
+    SimpleRabbitListenerContainerFactory listener3(org.springframework.amqp.rabbit.connection.ConnectionFactory factory3) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory3);
+        factory.setConnectionFactory(factory3);
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -131,9 +167,10 @@ public class RabbitConfig {
     }
 
     @Bean
-    SimpleRabbitListenerContainerFactory listener4(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory4) {
+    @Qualifier("listener4")
+    SimpleRabbitListenerContainerFactory listener4(org.springframework.amqp.rabbit.connection.ConnectionFactory factory4) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory4);
+        factory.setConnectionFactory(factory4);
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
