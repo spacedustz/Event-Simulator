@@ -134,9 +134,9 @@ public class RabbitConfig {
     @Bean
     @Primary
     @Qualifier("listener1")
-    SimpleRabbitListenerContainerFactory listener1(org.springframework.amqp.rabbit.connection.ConnectionFactory factory1) {
+    SimpleRabbitListenerContainerFactory listener1() {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(factory1);
+        factory.setConnectionFactory(factory1());
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -145,9 +145,9 @@ public class RabbitConfig {
 
     @Bean
     @Qualifier("listener2")
-    SimpleRabbitListenerContainerFactory listener2(org.springframework.amqp.rabbit.connection.ConnectionFactory factory2) {
+    SimpleRabbitListenerContainerFactory listener2() {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(factory2);
+        factory.setConnectionFactory(factory2());
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -156,9 +156,9 @@ public class RabbitConfig {
 
     @Bean
     @Qualifier("listener3")
-    SimpleRabbitListenerContainerFactory listener3(org.springframework.amqp.rabbit.connection.ConnectionFactory factory3) {
+    SimpleRabbitListenerContainerFactory listener3() {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(factory3);
+        factory.setConnectionFactory(factory3());
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
@@ -167,9 +167,9 @@ public class RabbitConfig {
 
     @Bean
     @Qualifier("listener4")
-    SimpleRabbitListenerContainerFactory listener4(org.springframework.amqp.rabbit.connection.ConnectionFactory factory4) {
+    SimpleRabbitListenerContainerFactory listener4() {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(factory4);
+        factory.setConnectionFactory(factory4());
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
