@@ -12,24 +12,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class MessageReceiver {
-
-    @RabbitListener(queues = "q.one")
+    @RabbitListener(queues = "q.one", containerFactory = "listener1")
     public void receive1(TripwireDto message) {
-      log.info("Message : {}", message.getSystem_date());
+        log.info("[Message Body] : {}", message.toString());
     }
 
-//    @RabbitListener(queues = "q.two")
-//    public void receive2(Object message) {
-//        log.info("Message : {}", message);
-//    }
-//
-//    @RabbitListener(queues = "q.three")
-//    public void receive3(Object message) {
-//        log.info("Message : {}", message);
-//    }
-//
-//    @RabbitListener(queues = "q.four")
-//    public void receive4(Object message) {
-//        log.info("Message : {}", message);
-//    }
+    @RabbitListener(queues = "q.two", containerFactory = "listener2")
+    public void receive2(TripwireDto message) {
+        log.info("[Message Body] : {}", message.toString());
+    }
+
+    @RabbitListener(queues = "q.three", containerFactory = "listener3")
+    public void receive3(TripwireDto message) {
+        log.info("[Message Body] : {}", message.toString());
+    }
+
+    @RabbitListener(queues = "q.four", containerFactory = "listener4")
+    public void receive4(TripwireDto message) {
+        log.info("[Message Body] : {}", message.toString());
+    }
 }
