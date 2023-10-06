@@ -17,8 +17,11 @@
 - [EC2 서버 세팅](https://github.com/spacedustz/Event-Simulator/blob/main/Description/EC2.md)
 - [application.yml 설정](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Yaml.md)
 - [RabbitMQ Management Console - Queue & Exchange 바인딩](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Rabbit-Console.md)
-- [Spring RabbitConfig 설정](https://github.com/spacedustz/Event-Simulator/blob/main/Description/RabbitConfig.md)
-- [Spring Message Publisher - 메시지 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher.md)
+- [RabbitConfig 설정](https://github.com/spacedustz/Event-Simulator/blob/main/Description/RabbitConfig.md)
+- [Message Publisher - 단순 테스트 메시지 (String) 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher.md)
+- [Message Publisher - 원본 메시지 역직렬화 -> 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher2.md)
+- [Message Receiver - 메시지 수신 테스트](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Receiver.md)
+- 
 
 ---
 
