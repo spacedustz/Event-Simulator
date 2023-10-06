@@ -13,73 +13,73 @@ Message를 Publish할때 Message를 단순한 String 값인 "Test Message"라는
 아래는 **원본 Json 데이터** 입니다.
 
 ```json
-{  
-  "events": [  
-    {  
-      "extra": {  
-        "bbox": {  
-          "height": 0.1276407390832901,  
-          "width": 0.02904696948826313,  
-          "x": 0.6992628574371338,  
-          "y": 0.43387532234191895  
-        },  
-        "class": "Person",  
-        "count": 2,  
-        "crossing_direction": "down",  
-        "external_id": "4e9ea30a-86a1-4c5d-a485-17a598f83c3b",  
-        "track_id": "PersonTracker_42",  
-        "tripwire": {  
-          "check_anchor_point": "bottom_center",  
-          "color": [  
-            0,  
-            0,  
-            1,  
-            1  
-          ],  
-          "cooldown_bandwidth": 0.07000000029802322,  
-          "cross_bandwidth": 0.029999999329447746,  
-          "crowding_min_count": 4,  
-          "detect_animals": true,  
-          "detect_people": true,  
-          "detect_unknowns": false,  
-          "detect_vehicles": true,  
-          "direction": "Both",  
-          "groupby": "tripwire_counting",  
-          "id": "91c21599-1d71-4455-a1d4-0fd2e9d70cf6",  
-          "ignore_stationary_objects": true,  
-          "inference_strategy": "full_frame",  
-          "name": "Wire-Test",  
-          "restrict_object_max_size": false,  
-          "restrict_object_min_size": false,  
-          "restrict_person_attributes": false,  
-          "restrict_vehicle_type": false,  
-          "timestamp": 1694047141888.0,  
-          "trigger_crossing": true,  
-          "trigger_crowding": false,  
-          "trigger_loitering": false,  
-          "trigger_on_enter": false,  
-          "trigger_on_exit": false,  
-          "vertices": [  
-            {  
-              "x": 0.7106109261512756,  
-              "y": 0.5444126129150391  
-            },  
-            {  
-              "x": 0.9437298774719238,  
-              "y": 0.6217765212059021  
-            }  
-          ]  
-        }  
-      },  
-      "id": "057baaa0-94c4-432f-8051-a5615f34b980",  
-      "label": "Tripwire crossed",  
-      "type": "tripwire_crossing"  
-    }  
-  ],  
-  "frame_id": 739,  
-  "frame_time": 24.633333333333333,  
-  "system_date": "Thu Sep 7 09:42:26 2023",  
-  "system_timestamp": 1694047346  
+{
+  "events": [
+    {
+      "extra": {
+        "bbox": {
+          "height": 0.1276407390832901,
+          "width": 0.02904696948826313,
+          "x": 0.6992628574371338,
+          "y": 0.43387532234191895
+        },
+        "class": "Person",
+        "count": 2,
+        "crossing_direction": "down",
+        "external_id": "4e9ea30a-86a1-4c5d-a485-17a598f83c3b",
+        "track_id": "PersonTracker_42",
+        "tripwire": {
+          "check_anchor_point": "bottom_center",
+          "color": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "cooldown_bandwidth": 0.07000000029802322,
+          "cross_bandwidth": 0.029999999329447746,
+          "crowding_min_count": 4,
+          "detect_animals": true,
+          "detect_people": true,
+          "detect_unknowns": false,
+          "detect_vehicles": true,
+          "direction": "Both",
+          "groupby": "tripwire_counting",
+          "id": "91c21599-1d71-4455-a1d4-0fd2e9d70cf6",
+          "ignore_stationary_objects": true,
+          "inference_strategy": "full_frame",
+          "name": "Wire-Test",
+          "restrict_object_max_size": false,
+          "restrict_object_min_size": false,
+          "restrict_person_attributes": false,
+          "restrict_vehicle_type": false,
+          "timestamp": 1694047141888.0,
+          "trigger_crossing": true,
+          "trigger_crowding": false,
+          "trigger_loitering": false,
+          "trigger_on_enter": false,
+          "trigger_on_exit": false,
+          "vertices": [
+            {
+              "x": 0.7106109261512756,
+              "y": 0.5444126129150391
+            },
+            {
+              "x": 0.9437298774719238,
+              "y": 0.6217765212059021
+            }
+          ]
+        }
+      },
+      "id": "057baaa0-94c4-432f-8051-a5615f34b980",
+      "label": "Tripwire crossed",
+      "type": "tripwire_crossing"
+    }
+  ],
+  "frame_id": 739,
+  "frame_time": 24.633333333333333,
+  "system_date": "Thu Sep 7 09:42:26 2023",
+  "system_timestamp": 1694047346
 }
 ```
 
@@ -93,8 +93,11 @@ Extra 클래스의 wireClass 필드는 원본 데이터에서 키 값이 `class`
 
 @JsonProperty()에 원본 키 값을 써주고 Java에서의 필드명은 임의로 wireClass라고 지정 하였습니다.
 
+@ToString은 이제 곧 만들 MessageReceiver에서 DTO에 Json의 값들이 전부 잘 들어갔는지 확인하기 위해 달아주었습니다.
+
 ```java
 @Getter  
+@ToString  
 public class TripwireDto {  
     private List<TripwireDto.Event> events;  
     private int frame_id;  
@@ -103,14 +106,14 @@ public class TripwireDto {
     private long system_timestamp;  
   
     @Getter  
-    public static class Event {  
+    @ToString    public static class Event {  
         private TripwireDto.Event.Extra extra;  
         private String id;  
         private String label;  
         private String type;  
   
         @Getter  
-        public static class Extra {  
+        @ToString        public static class Extra {  
             private TripwireDto.Event.Extra.Bbox bbox;  
             @JsonProperty("class")  
             private String wireClass;  
@@ -121,7 +124,7 @@ public class TripwireDto {
             private TripwireDto.Event.Extra.Tripwire tripwire;  
   
             @Getter  
-            public static class Bbox {  
+            @ToString            public static class Bbox {  
                 private double height;  
                 private double width;  
                 private double x;  
@@ -129,7 +132,7 @@ public class TripwireDto {
             }  
   
             @Getter  
-            public static class Tripwire {  
+            @ToString            public static class Tripwire {  
                 private String check_anchor_point;  
                 private List<Double> color;  
                 private double cooldown_bandwidth;  
@@ -158,7 +161,7 @@ public class TripwireDto {
                 private List<TripwireDto.Event.Extra.Tripwire.Vertices> vertices;  
   
                 @Getter  
-                public static class Vertices {  
+                @ToString                public static class Vertices {  
                     private double x;  
                     private double y;  
                 }  
@@ -245,3 +248,4 @@ public class MessagePublisher {
         }  
     }  
 }
+```
