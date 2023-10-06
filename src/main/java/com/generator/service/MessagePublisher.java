@@ -1,9 +1,12 @@
 package com.generator.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.generator.dto.TripwireDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,12 @@ public class MessagePublisher {
     @Autowired
     @Qualifier("template4")
     private RabbitTemplate template4;
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    private static final TripwireDto tripwire = new TripwireDto(); // 샘플로 보낼 데이터
+
 
     @Scheduled(fixedDelay = 1000) // 1초마다 실행
     public void simulate1() {
@@ -55,12 +64,15 @@ public class MessagePublisher {
             default -> "";
         };
 
+        ClassPathResource resource = new ClassPathResource("sample/tripwire-counting.json");
+
         try {
-            String message = "Test Message";
+            TripwireDto message = mapper.readValue(resource.getInputStream(), tripwire.getClass());
+
             template.convertAndSend(exchange, routingKey, message);
             log.info("[Rabbit {}] - 데이터 전송 완료", server);
         } catch (Exception e) {
-            log.error("[Simulator Error] : {}", e.getMessage());
+            log.error("[Simulator Error] : {}, Cause : {}", e.getMessage(), e.getCause());
         }
     }
 }
