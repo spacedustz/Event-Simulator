@@ -21,7 +21,6 @@
 - [Message Publisher - 단순 테스트 메시지 (String) 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher.md)
 - [Message Publisher - 원본 메시지 역직렬화 -> 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher2.md)
 - [Message Receiver - 메시지 수신 테스트](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Receiver.md)
-- 
 
 ---
 
