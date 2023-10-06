@@ -2,10 +2,12 @@ package com.generator.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
+@ToString
 public class TripwireDto {
     private List<TripwireDto.Event> events;
     private int frame_id;
@@ -14,6 +16,7 @@ public class TripwireDto {
     private long system_timestamp;
 
     @Getter
+    @ToString
     public static class Event {
         private TripwireDto.Event.Extra extra;
         private String id;
@@ -21,6 +24,7 @@ public class TripwireDto {
         private String type;
 
         @Getter
+        @ToString
         public static class Extra {
             private TripwireDto.Event.Extra.Bbox bbox;
             @JsonProperty("class")
@@ -32,6 +36,7 @@ public class TripwireDto {
             private TripwireDto.Event.Extra.Tripwire tripwire;
 
             @Getter
+            @ToString
             public static class Bbox {
                 private double height;
                 private double width;
@@ -40,6 +45,7 @@ public class TripwireDto {
             }
 
             @Getter
+            @ToString
             public static class Tripwire {
                 private String check_anchor_point;
                 private List<Double> color;
@@ -69,6 +75,7 @@ public class TripwireDto {
                 private List<TripwireDto.Event.Extra.Tripwire.Vertices> vertices;
 
                 @Getter
+                @ToString
                 public static class Vertices {
                     private double x;
                     private double y;
