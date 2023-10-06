@@ -6,18 +6,24 @@
 
 만약 데이터가 잘못됬다면 Publish 단계부터 Exception이 나므로, 로그에 Message의 `system_date`가 출력된다면 잘 된겁니다.
 
+<br>
+
+1초마다 4개의 RabbitMQ에 데이터를 잘 보내고 있고, 그 중 1번 RabbitMQ의 Queue에서만 데이터를 빼와서 출력합니다.
+
+**(메시지가 길기 때문에 확인 용으로 잠시 2,3,4번은 주석 처리)**
+
 ```java
-@Slf4j
-@Service
-@Transactional
-@RequiredArgsConstructor
-public class MessageReceiver {
-
-    @RabbitListener(queues = "q.one", containerFactory = "listener1")
-    public void receive1(TripwireDto message) {
-        log.info("[Message Body] : {}", message.toString());
-    }
-
+@Slf4j  
+@Service  
+@Transactional  
+@RequiredArgsConstructor  
+public class MessageReceiver {  
+  
+    @RabbitListener(queues = "q.one", containerFactory = "listener1")  
+    public void receive1(TripwireDto message) {  
+        log.info("[Message Body] : {}", message.toString());  
+    }  
+  
 //    @RabbitListener(queues = "q.two", containerFactory = "listener2")  
 //    public void receive2(TripwireDto message) {  
 //        log.info("[Message Body] : {}", message.toString());  
@@ -48,24 +54,22 @@ public class MessageReceiver {
 **예: 1번 Rabbit의 Container Factory**
 
 ```java
-@Bean
-@Primary
+@Bean  
+@Primary  
 @Qualifier("listener1")  
-SimpleRabbitListenerContainerFactory listener1() {
-final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(factory1());
-        factory.setMessageConverter(converter());
-        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
-
-        return factory;
-        }
+SimpleRabbitListenerContainerFactory listener1() {  
+    final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();  
+    factory.setConnectionFactory(factory1());  
+    factory.setMessageConverter(converter());  
+    factory.setAcknowledgeMode(AcknowledgeMode.AUTO);  
+  
+    return factory;  
+}
 ```
 
 <br>
 
 **이제 시뮬레이터 (Spring Boot)를 실행 시켜 보겠습니다.**
-
-1초마다 4개의 RabbitMQ에 데이터를 잘 보내고 있고, 그 중 1번 RabbitMQ의 Queue에서만 데이터를 빼와서 출력합니다.
 
 값을 확인해보면, 원본 Json 데이터의 값이 모두 잘 들어가 있습니다.
 
