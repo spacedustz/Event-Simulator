@@ -9,7 +9,7 @@ spring:
 
   # RabbitMQ ??
   rabbitmq:
-    host: 1.1.1.1
+    host: 52.79.143.215
     port: 5672
     username: guest
     password: guest
@@ -23,6 +23,9 @@ spring:
     url: jdbc:h2:mem:test
     username: root
     password: 1234
+#  sql:
+#    init:
+#      mode: always
 
   # JPA ??
   jpa:
@@ -33,6 +36,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+#    defer-datasource-initialization: true # Hibernate 초기화 이후 Init Data 동작
 
 # Logging
 logging:
