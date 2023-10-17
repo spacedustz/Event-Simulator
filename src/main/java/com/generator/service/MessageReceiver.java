@@ -1,6 +1,7 @@
 package com.generator.service;
 
 import com.generator.dto.TripwireDto;
+import com.rabbitmq.client.RpcClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,6 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class MessageReceiver {
+
+//    @RabbitListener(queues = "event-1", containerFactory = "listener1")
+//    public void receiveEvent(RpcClient.Response message) {
+//        log.info("테스트 데이터 : {}", message.toString());
+//    }
+
     @RabbitListener(queues = "q.one", containerFactory = "listener1")
     public void receive1(TripwireDto message) {
         log.info("[Message Body] : {}", message.toString());
