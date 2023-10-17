@@ -1,7 +1,10 @@
 package com.generator.service;
 
+import co.kr.dains.crowd.estimation.common.domain.svc.SvcInstance;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.generator.dto.EstimationDto;
 import com.generator.dto.TripwireDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,29 +13,25 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MessagePublisher {
-    @Autowired
-    @Qualifier("template1")
-    private RabbitTemplate template1;
+    @Autowired @Qualifier("template1")
+    private final RabbitTemplate template1;
 
-    @Autowired
-    @Qualifier("template2")
-    private RabbitTemplate template2;
+    @Autowired @Qualifier("template2")
+    private final RabbitTemplate template2;
 
-    @Autowired
-    @Qualifier("template3")
-    private RabbitTemplate template3;
+    @Autowired @Qualifier("template3")
+    private final RabbitTemplate template3;
 
-    @Autowired
-    @Qualifier("template4")
-    private RabbitTemplate template4;
-
-    @Autowired
-    private ObjectMapper mapper;
-
-    private static final TripwireDto tripwire = new TripwireDto(); // 샘플로 보낼 데이터
+    @Autowired @Qualifier("template4")
+    private final RabbitTemplate template4;
+    private final InstanceService instanceService;
+    private final ObjectMapper mapper;
 
 
     @Scheduled(fixedDelay = 1000) // 1초마다 실행
@@ -64,15 +63,30 @@ public class MessagePublisher {
             default -> "";
         };
 
-        ClassPathResource resource = new ClassPathResource("sample/tripwire-counting.json");
+        ClassPathResource tripwire = new ClassPathResource("sample/tripwire-counting.json");
+        ClassPathResource estimation = new ClassPathResource("sample/crowd-estimation.json");
+        List<SvcInstance> randomInstances = instanceService.getRandomInstances();
 
-        try {
-            TripwireDto message = mapper.readValue(resource.getInputStream(), tripwire.getClass());
+        for (SvcInstance instance : randomInstances) {
 
-            template.convertAndSend(exchange, routingKey, message);
-            log.info("[Rabbit {}] - 데이터 전송 완료", server);
-        } catch (Exception e) {
-            log.error("[Simulator Error] : {}, Cause : {}", e.getMessage(), e.getCause());
+            if (instance.getInstanceName().startsWith("S")) {
+                try {
+                    TripwireDto message = mapper.readValue(tripwire.getInputStream(), TripwireDto.class);
+
+                    template.convertAndSend(exchange, routingKey, message);
+                    log.info("[Rabbit {}] - 데이터 전송 완료", server);
+                } catch (Exception e) {
+                    log.error("[데이터 전송 실패 - Tripwire] Instance ID : {}, Error : {}", instance.getInstanceId(), e.getMessage());
+                }
+            } else if (instance.getInstanceName().startsWith("E")) {
+                try {
+                    EstimationDto message = mapper.readValue(estimation.getInputStream(), EstimationDto.class);
+
+                    template.convertAndSend(exchange, routingKey, message);
+                } catch (Exception e) {
+                    log.error("[데이터 전송 실패 - Estimation] Instance ID : {}, Error : {}", instance.getInstanceId(), e.getMessage());
+                }
+            }
         }
     }
 }
