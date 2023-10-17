@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"co.kr.dains.crowd.estimation.common", "com"})
 public class EventGeneratorApplication {
 
     public static void main(String[] args) {
