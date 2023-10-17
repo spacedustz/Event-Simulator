@@ -19,6 +19,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -31,6 +32,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation group: 'co.kr.dains.crowd.estimation.common', name: 'crowd-estimation-common', version: '1.0.0'
 }
 
 tasks.named('test') {
