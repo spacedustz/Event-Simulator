@@ -84,6 +84,4 @@ public class TripwireDto {
         private double x;
         private double y;
     }
-
-
 }
