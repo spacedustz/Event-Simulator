@@ -31,8 +31,6 @@ public class InstanceService {
             }
         });
 
-//        selectedInstances.stream().map(SvcInstance::getInstanceName).forEach(it -> log.info("랜덤 리스트 로그 : {}", it));
-
         return selectedInstances;
     }
 }
