@@ -45,7 +45,7 @@ public class RabbitConfig {
         factory.setUsername(id);
         factory.setPassword(pw);
 
-        log.info("[Bean] Connection Factory 1 연결 성공 - Port : {}", factory.getPort());
+        log.info("[Bean] Connection Factory 1 등록 - Port : {}", factory.getPort());
         return factory;
     }
 
@@ -58,7 +58,7 @@ public class RabbitConfig {
         factory.setUsername(id);
         factory.setPassword(pw);
 
-        log.info("[Bean] Connection Factory 2 연결 성공 - Port : {}", factory.getPort());
+        log.info("[Bean] Connection Factory 2 등록 - Port : {}", factory.getPort());
         return factory;
     }
 
@@ -71,7 +71,7 @@ public class RabbitConfig {
         factory.setUsername(id);
         factory.setPassword(pw);
 
-        log.info("[Bean] Connection Factory 3 연결 성공 - Port : {}", factory.getPort());
+        log.info("[Bean] Connection Factory 3 등록 - Port : {}", factory.getPort());
         return factory;
     }
 
@@ -84,7 +84,7 @@ public class RabbitConfig {
         factory.setUsername(id);
         factory.setPassword(pw);
 
-        log.info("[Bean] Connection Factory 4 연결 성공 - Port : {}", factory.getPort());
+        log.info("[Bean] Connection Factory 4 등록 - Port : {}", factory.getPort());
         return factory;
     }
 
@@ -96,7 +96,7 @@ public class RabbitConfig {
         RabbitTemplate template = new RabbitTemplate(factory1());
         template.setMessageConverter(converter());
 
-        log.info("[Bean] Template 1 연결 성공");
+        log.info("[Bean] Template 1 등록");
         return template;
     }
 
@@ -106,7 +106,7 @@ public class RabbitConfig {
         RabbitTemplate template = new RabbitTemplate(factory2());
         template.setMessageConverter(converter());
 
-        log.info("[Bean] Template 2 연결 성공");
+        log.info("[Bean] Template 2 등록");
         return template;
     }
 
@@ -116,7 +116,7 @@ public class RabbitConfig {
         RabbitTemplate template = new RabbitTemplate(factory3());
         template.setMessageConverter(converter());
 
-        log.info("[Bean] Template 3 연결 성공");
+        log.info("[Bean] Template 3 등록");
         return template;
     }
 
@@ -126,7 +126,7 @@ public class RabbitConfig {
         RabbitTemplate template = new RabbitTemplate(factory4());
         template.setMessageConverter(converter());
 
-        log.info("[Bean] Template 4 연결 성공");
+        log.info("[Bean] Template 4 등록");
         return template;
     }
 
@@ -140,6 +140,7 @@ public class RabbitConfig {
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
+        log.info("[Bean] Rabbit Listener Container Factory 1 등록");
         return factory;
     }
 
@@ -151,6 +152,7 @@ public class RabbitConfig {
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
+        log.info("[Bean] Rabbit Listener Container Factory 2 등록");
         return factory;
     }
 
@@ -162,6 +164,7 @@ public class RabbitConfig {
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
+        log.info("[Bean] Rabbit Listener Container Factory 3 등록");
         return factory;
     }
 
@@ -173,6 +176,7 @@ public class RabbitConfig {
         factory.setMessageConverter(converter());
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
+        log.info("[Bean] Rabbit Listener Container Factory 4 등록");
         return factory;
     }
 }
