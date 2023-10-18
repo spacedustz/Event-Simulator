@@ -1,5 +1,7 @@
 ## 📘 Event Simulator 개발
 
+Init Schema, Data는 프로젝트 소스에 올리지 않고 Simulator 기능만 올려두었습니다.
+
 **요구 사항**
 
 - AWS EC2 (Amazon Linux)를 생성하여 Docker 설치
@@ -21,6 +23,7 @@
 - [Message Publisher - 단순 테스트 메시지 (String) 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher.md)
 - [Message Publisher - 원본 메시지 역직렬화 -> 발행](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Publisher2.md)
 - [Message Receiver - 메시지 수신 테스트](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Receiver.md)
+- [Message Publisher - Publish Random Instance/Values with Base 64 Encoding Image](https://github.com/spacedustz/Event-Simulator/blob/main/Description/Random.md)
 
 ---
 
