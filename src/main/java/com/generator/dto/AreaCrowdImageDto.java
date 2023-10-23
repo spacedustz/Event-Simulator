@@ -11,7 +11,14 @@ import java.util.List;
 public class AreaCrowdImageDto {
     @JsonProperty("events")
     private List<Event> events;
-
+    @JsonProperty("frame_id")
+    private Integer frameId;
+    @JsonProperty("frame_time")
+    private Double frameTime;
+    @JsonProperty("system_date")
+    private String systemDate;
+    @JsonProperty("system_timestamp")
+    private Long systemTimestamp;
 
     @Data
     public static class Event {
