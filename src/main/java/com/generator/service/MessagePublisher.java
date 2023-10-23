@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Random;
 
@@ -37,31 +38,31 @@ public class MessagePublisher {
     public void simulate1() {
         List<SvcInstance> randomInstances = getRandomInstances();
         List<SvcInstance> instances = randomInstances.subList(0, 30);
-        sendData(instances, template1, "ex.one", "one");
+        sendData(instances, template1, "event");
     }
 
     @Scheduled(fixedDelay = 1000) // 1초마다 실행
     public void simulate2() {
         List<SvcInstance> randomInstances = getRandomInstances();
         List<SvcInstance> instances = randomInstances.subList(30, 60);
-        sendData(instances, template2, "ex.two", "two");
+        sendData(instances, template2, "event");
     }
 
     @Scheduled(fixedDelay = 1000) // 1초마다 실행
     public void simulate3() {
         List<SvcInstance> randomInstances = getRandomInstances();
         List<SvcInstance> instances = randomInstances.subList(60, 90);
-        sendData(instances, template3, "ex.three", "three");
+        sendData(instances, template3, "event");
     }
 
     @Scheduled(fixedDelay = 1000) // 1초마다 실행
     public void simulate4() {
         List<SvcInstance> randomInstances = getRandomInstances();
         List<SvcInstance> instances = randomInstances.subList(90, 120);
-        sendData(instances, template4, "ex.four", "four");
+        sendData(instances, template4, "event");
     }
 
-    public void sendData(List<SvcInstance> list, RabbitTemplate template, String exchange, String routingKey) {
+    public void sendData(List<SvcInstance> list, RabbitTemplate template, String routingKey) {
         String server = switch (template.getConnectionFactory().getPort()) {
             case 5672 -> "1";
             case 5673 -> "2";
@@ -81,7 +82,10 @@ public class MessagePublisher {
 //                    TripwireDto message = mapper.readValue(tripwire.getInputStream(), TripwireDto.class);
                     AreaCrowdImageDto message = mapper.readValue(areaCrowd.getInputStream(), AreaCrowdImageDto.class);
                     message.getEvents().get(0).getExtra().setCurrentEntries(new Random().nextInt(51));
-                    template.convertAndSend(exchange, routingKey, message);
+                    message.getEvents().forEach(it -> it.setInstanceId(instance.getInstanceExtId()));
+                    message.setSystemTimestamp(Instant.now().getEpochSecond());
+
+                    template.convertAndSend(routingKey, message);
 
                     log.info("[Rabbit {}] - Area Crowd 데이터 전송 완료", server);
                 } catch (Exception e) {
@@ -91,7 +95,10 @@ public class MessagePublisher {
                 try {
                     EstimationDto message = mapper.readValue(estimation.getInputStream(), EstimationDto.class);
                     message.setCount(new Random().nextInt(51));
-                    template.convertAndSend(exchange, routingKey, message);
+                    message.setInstanceId(instance.getInstanceExtId());
+                    message.setSystemTimestamp(Instant.now().getEpochSecond());
+
+                    template.convertAndSend(routingKey, message);
 
                     log.info("[Rabbit {}] - Estimation 데이터 전송 완료", server);
                 } catch (Exception e) {
